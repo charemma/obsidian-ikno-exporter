@@ -1,0 +1,10 @@
+{
+  "id": "ikno-helper",
+  "name": "ikno Helper",
+  "version": "0.1.0",
+  "minAppVersion": "1.0.0",
+  "description": "Helps ikno reconstruct your workday by logging file changes to .ikno/ inside your vault.",
+  "author": "charemma",
+  "authorUrl": "https://ikno.charemma.de",
+  "isDesktopOnly": false
+}
