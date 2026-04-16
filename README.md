@@ -1,30 +1,59 @@
 # ikno Obsidian Exporter
 
-Obsidian plugin that logs markdown file changes in your vault to a local folder, so the [ikno](https://ikno.charemma.de) CLI can reconstruct what you worked on during the day.
+**This plugin only makes sense if you use the [ikno](https://ikno.charemma.de) CLI.** On its own, it does nothing useful for you -- it just writes log files.
 
-It is a passive companion to ikno: no UI, no telemetry, no network. Everything lives inside the vault under `.ikno/` and syncs with whatever you already use (Obsidian Sync, Syncthing, iCloud, Git).
+## What it does
 
-## What it records
+ikno is a command-line tool that reconstructs your workday from traces you already leave behind (git commits, notes, AI sessions). For Obsidian vaults, ikno needs to know what you wrote and when.
 
-For every `.md` file in your vault the plugin writes one NDJSON line per change to `.ikno/log/YYYY-MM-DD.ndjson`:
+Without this plugin, ikno can only see that a file was modified -- not what changed. With this plugin, every save in your vault is logged with a timestamp and a diff. ikno reads these logs and turns them into a readable recap.
 
-- `created` with the full content of the new file
-- `modified` with a unified diff against the previously known state
-- `deleted` with the last known content
-- `renamed` with old and new path
+## How it works
 
-A shadow copy of the current markdown state lives in `.ikno/.current/` and is used as the baseline for diffs. It is an implementation detail and should not be edited by hand.
+```
+1. You write in Obsidian
+       |
+       v
+2. Plugin logs the change to .ikno/log/YYYY-MM-DD.ndjson inside your vault
+       |
+       v
+3. Obsidian Sync / Syncthing / iCloud syncs .ikno/ to your other devices
+       |
+       v
+4. You run "ikno recap" on your main machine
+       |
+       v
+5. ikno reads the logs and generates a workday summary
+```
 
-## What it does not record
+The log is a plain text NDJSON file in your vault. You can inspect it, delete it, or back it up like any other vault content.
 
-- Non-markdown files (images, PDFs, canvas, Excalidraw, etc.)
-- Files under `.ikno/` itself
-- Files under `.obsidian/`
-- Anything that matches an entry in `exclude_patterns` (see config)
+## What gets logged
+
+For every `.md` file in your vault the plugin writes one line per change to `.ikno/log/YYYY-MM-DD.ndjson`:
+
+- `created` -- full content of the new file
+- `modified` -- a unified diff against the previously known state
+- `deleted` -- the last known content before deletion
+- `renamed` -- old and new path
+
+Skipped: non-markdown files (images, PDFs, canvas), `.obsidian/`, `.ikno/` itself, anything matched by `exclude_patterns`.
+
+A shadow copy of the current state lives in `.ikno/.current/` and is used only to compute diffs. Do not edit it by hand.
+
+## Why not just use file modification times?
+
+Because mtime tells you a file was touched, not what changed. If you write "Added feature X" in your daily note at 10am and "Fixed bug Y" at 3pm, ikno only knows "the file was modified today". With this plugin, ikno can see both entries with timestamps.
+
+## Privacy and sync
+
+- Everything stays in your vault. No network, no telemetry.
+- The log syncs with whatever you already use (Obsidian Sync, Syncthing, iCloud, Git).
+- You can delete `.ikno/` at any time. The plugin will rebuild it on next save.
 
 ## Config
 
-On first load the plugin creates `.ikno/config.json` with defaults:
+On first load the plugin creates `.ikno/config.json`:
 
 ```json
 {
@@ -34,14 +63,14 @@ On first load the plugin creates `.ikno/config.json` with defaults:
 }
 ```
 
-- `retention_days` -- log files older than this are pruned on plugin load
-- `exclude_patterns` -- simple glob patterns matched against the full path or file name
+- `retention_days` -- old logs are deleted after this many days
+- `exclude_patterns` -- glob patterns of files to skip
 
-There is intentionally no settings tab. Edit `config.json` and reload Obsidian.
+Edit `config.json` and reload Obsidian to apply changes.
 
 ## Install
 
-### Via BRAT
+### Via BRAT (recommended for now)
 
 1. Install the [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin.
 2. Add `charemma/obsidian-ikno-exporter` as a beta plugin.
@@ -49,22 +78,13 @@ There is intentionally no settings tab. Edit `config.json` and reload Obsidian.
 
 ### Manual
 
-1. Run `npm install && npm run build` in this repo.
+1. `npm install && npm run build` in this repo.
 2. Copy `main.js` and `manifest.json` into `<vault>/.obsidian/plugins/ikno-obsidian-exporter/`.
 3. Enable "ikno Obsidian Exporter" in Obsidian's community plugins list.
 
-## Build
-
-```
-npm install
-npm run build
-```
-
-The build produces `main.js` in the repo root next to `manifest.json`.
-
 ## Mobile
 
-The plugin sets `isDesktopOnly: false` and only uses Obsidian's vault adapter, so it also runs on iOS and Android.
+Works on iOS and Android. Writes logs the same way as on desktop.
 
 ## License
 
