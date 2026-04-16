@@ -1,4 +1,4 @@
-# ikno Helper
+# ikno Obsidian Exporter
 
 Obsidian plugin that logs markdown file changes in your vault to a local folder, so the [ikno](https://ikno.charemma.de) CLI can reconstruct what you worked on during the day.
 
@@ -44,14 +44,14 @@ There is intentionally no settings tab. Edit `config.json` and reload Obsidian.
 ### Via BRAT
 
 1. Install the [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin.
-2. Add `charemma/obsidian-ikno-helper` as a beta plugin.
-3. Enable "ikno Helper" in Obsidian's community plugins list.
+2. Add `charemma/obsidian-ikno-exporter` as a beta plugin.
+3. Enable "ikno Obsidian Exporter" in Obsidian's community plugins list.
 
 ### Manual
 
 1. Run `npm install && npm run build` in this repo.
-2. Copy `main.js` and `manifest.json` into `<vault>/.obsidian/plugins/ikno-helper/`.
-3. Enable "ikno Helper" in Obsidian's community plugins list.
+2. Copy `main.js` and `manifest.json` into `<vault>/.obsidian/plugins/ikno-obsidian-exporter/`.
+3. Enable "ikno Obsidian Exporter" in Obsidian's community plugins list.
 
 ## Build
 

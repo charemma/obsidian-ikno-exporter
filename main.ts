@@ -36,7 +36,7 @@ const DEFAULT_CONFIG: IknoConfig = {
 	exclude_patterns: ["*.excalidraw.md"],
 };
 
-export default class IknoHelperPlugin extends Plugin {
+export default class IknoExporterPlugin extends Plugin {
 	config: IknoConfig = DEFAULT_CONFIG;
 
 	async onload() {
@@ -149,7 +149,7 @@ export default class IknoHelperPlugin extends Plugin {
 				const content = await this.app.vault.read(file);
 				await this.writeCurrent(file.path, content);
 			} catch (err) {
-				console.warn("ikno-helper: could not snapshot renamed file", err);
+				console.warn("ikno-obsidian-exporter: could not snapshot renamed file", err);
 			}
 		}
 
@@ -187,8 +187,8 @@ export default class IknoHelperPlugin extends Plugin {
 				this.config = { ...DEFAULT_CONFIG, ...parsed };
 				return;
 			} catch (err) {
-				console.warn("ikno-helper: failed to read config, using defaults", err);
-				new Notice("ikno-helper: config.json is invalid, using defaults");
+				console.warn("ikno-obsidian-exporter: failed to read config, using defaults", err);
+				new Notice("ikno-obsidian-exporter: config.json is invalid, using defaults");
 			}
 		}
 		await adapter.write(
@@ -226,7 +226,7 @@ export default class IknoHelperPlugin extends Plugin {
 		try {
 			return await adapter.read(target);
 		} catch (err) {
-			console.warn("ikno-helper: could not read current snapshot", err);
+			console.warn("ikno-obsidian-exporter: could not read current snapshot", err);
 			return null;
 		}
 	}
@@ -238,7 +238,7 @@ export default class IknoHelperPlugin extends Plugin {
 			try {
 				await adapter.remove(target);
 			} catch (err) {
-				console.warn("ikno-helper: could not remove current snapshot", err);
+				console.warn("ikno-obsidian-exporter: could not remove current snapshot", err);
 			}
 		}
 	}
@@ -272,7 +272,7 @@ export default class IknoHelperPlugin extends Plugin {
 				await adapter.write(file, line);
 			}
 		} catch (err) {
-			console.error("ikno-helper: failed to append log entry", err);
+			console.error("ikno-obsidian-exporter: failed to append log entry", err);
 		}
 	}
 
@@ -297,7 +297,7 @@ export default class IknoHelperPlugin extends Plugin {
 				try {
 					await adapter.remove(file);
 				} catch (err) {
-					console.warn("ikno-helper: failed to remove old log", file, err);
+					console.warn("ikno-obsidian-exporter: failed to remove old log", file, err);
 				}
 			}
 		}

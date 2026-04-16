@@ -1,7 +1,7 @@
 {
-  "name": "obsidian-ikno-helper",
+  "name": "obsidian-ikno-exporter",
   "version": "0.1.0",
-  "description": "Obsidian plugin that helps ikno reconstruct your workday by logging file changes.",
+  "description": "Obsidian plugin that exports file changes for ikno workday recaps.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",

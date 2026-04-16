@@ -1,9 +1,9 @@
 {
-  "id": "ikno-helper",
-  "name": "ikno Helper",
+  "id": "ikno-obsidian-exporter",
+  "name": "ikno Obsidian Exporter",
   "version": "0.1.0",
   "minAppVersion": "1.0.0",
-  "description": "Helps ikno reconstruct your workday by logging file changes to .ikno/ inside your vault.",
+  "description": "Exports Obsidian file changes to .ikno/ inside your vault so ikno can reconstruct your workday.",
   "author": "charemma",
   "authorUrl": "https://ikno.charemma.de",
   "isDesktopOnly": false
